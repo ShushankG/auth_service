@@ -1,7 +1,7 @@
-import express from 'express';
-import {v1routes} from './v1/index.js'
-const router=express.Router();
+import express from "express";
+import { v1routes } from "./v1/index.js";
+const router = express.Router();
 
-router.use('/v1',v1routes);
+router.use("/v1", v1routes);
 
-export {router as apiRoutes};
+export { router as apiRoutes };
