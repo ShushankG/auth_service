@@ -18,7 +18,6 @@ async function create(req, res) {
       err: {},
     });
   } catch (error) {
-    console.log(error);
     return res.status(500).json({
       success: false,
       message: "Something went wrong !",
@@ -52,28 +51,53 @@ async function signIn(req, res) {
   }
 }
 
-function isAuthenticated(req,res){
- try{
-  const authHeader =req.headers.authorization;
-  const token =authHeader && authHeader.split(' ')[1];
-  let response =Service.verifyToken(token);
-  return res.status(200).json({
-    success:true,
-    message:"User is authenticated !",
-    data: response,
-    error: {}
-  });
-
-
- }catch(error){
-  return res.status(500).json({
-    success:true,
-    message:"Something went wrong !",
-    data: {},
-    error: error.message
-  });
- }
-
+function isAuthenticated(req, res) {
+  try {
+    const authHeader = req.headers.authorization;
+    const token = authHeader && authHeader.split(" ")[1];
+    let response = Service.verifyToken(token);
+    return res.status(200).json({
+      success: true,
+      message: "User is authenticated !",
+      data: response,
+      error: {},
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: true,
+      message: "Something went wrong !",
+      data: {},
+      error: error.message,
+    });
+  }
+}
+async function isAdmin(req, res) {
+  try {
+    const user_id = req.body.id;
+    let response = await Service.isAdmin(user_id);
+    if (response) {
+      return res.status(200).json({
+        success: true,
+        message: "Admin level user !",
+        data: {},
+        error: {},
+      });
+    } else {
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized user !",
+        data: {},
+        error: {},
+      });
+    }
+  } catch (error) {
+    return res.status(500).json({
+      success: true,
+      message: "Something went wrong !",
+      data: {},
+      error: error.message,
+    });
+  }
 }
 
-export { create, signIn, isAuthenticated };
+export { create, signIn, isAuthenticated, isAdmin };

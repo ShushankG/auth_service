@@ -4,7 +4,7 @@ import { defineConfig } from "drizzle-kit";
 dotenv.config();
 
 export default defineConfig({
-  schema: "./src/models/user.js",
+  schema: "./src/models/*.js",
   out: "./src/migrations",
   dbCredentials: {
     host: process.env.DB_HOST,

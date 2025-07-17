@@ -41,7 +41,6 @@ export class userService {
 
   async createToken(user) {
     let userDetail = await this.userRepository.getUserByEmail(user);
-    console.log(serverConfig.jwtSecret);
     var token = jwt.sign(userDetail[0], serverConfig.jwtSecret, {
       expiresIn: "1h",
     });
@@ -49,13 +48,18 @@ export class userService {
   }
 
   async verifyToken(token) {
-
-    let decoded = jwt.verify(token,serverConfig.jwtSecret);
-     if(!decoded){
+    let decoded = jwt.verify(token, serverConfig.jwtSecret);
+    if (!decoded) {
       throw new Error("Access token is missing!");
     }
-     return {user_id:decoded.id};
-
-    
+    return { user_id: decoded.id };
+  }
+  async isAdmin(user_id) {
+    let response = await this.userRepository.isAdmin(user_id);
+    let roles = response.map((val) => val.role_name);
+    if (!response) {
+      throw new Error("Something went wrong while fetching user role !");
+    }
+    return roles.includes("Admin");
   }
 }
